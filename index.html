@@ -31,6 +31,14 @@
         <div id="calendar"></div>
       </div>
 
+      <div id="deleteEventModal">
+        <h2>Event</h2>
+        <p id="eventText"></p>
+
+        <button id="deleteButton">Delete</button>
+        <button id="closeButton">Close</button>
+      </div>
+
       <div id="modalBackDrop"></div>
 
       <div class="formContainer">
@@ -62,9 +70,13 @@
           </select>
 
           <label for="description">Description</label>
-          <input type="text" id="description" />
+          <textarea rows="4" cols="50" id="description"></textarea>
 
           <button id="addEvent">Add event</button>
+        </div>
+        <div id="eventsContainer">
+          <h2>Events</h2>
+          <div id="eventsList"></div>
         </div>
       </div>
     </div>

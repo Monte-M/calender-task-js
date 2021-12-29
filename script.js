@@ -18,6 +18,12 @@ const typeInput = document.getElementById('type');
 const descriptionInput = document.getElementById('description');
 const addEventBtn = document.getElementById('addEvent');
 
+// event elements
+const eventsContainerEl = document.getElementById('eventsContainer');
+const eventsListEl = document.getElementById('eventsList');
+const singleEventEl = document.getElementById('singleEvent');
+const titleEl = document.getElementById('titleEl');
+
 addEventBtn.onclick = () => {
   if (title.value) {
     title.classList.remove('error');
@@ -47,6 +53,51 @@ const weekdays = [
   'Saturday',
   'Sunday',
 ];
+
+function openModal(date) {
+  clicked = date;
+
+  const eventForDay = events.find((e) => e.date === clicked);
+
+  if (eventForDay) {
+    document.getElementById('eventText').innerText = eventForDay.title;
+    deleteEventModal.style.display = 'block';
+  } else {
+    newEventModal.style.display = 'block';
+  }
+
+  backDrop.style.display = 'block';
+  console.log('date1', date);
+}
+
+function showEvents(date) {
+  clicked = date;
+  console.log('clicked', clicked);
+
+  const eventForDay = events.filter((e) => e.date == clicked);
+  if (eventForDay.length > 0) {
+    eventsContainerEl.style.display = 'flex';
+    const item = eventForDay
+      .map(
+        (item) => `
+          <div class='singleEvent'>
+            <p>Title: ${item.title}</p>
+            <div class='eventTimes'>
+              <p>Start time: ${item.startTime}</p>
+              <p>End time: ${item.endTime}</p>
+            </div>
+            <p>Type: ${item.type}</p>
+            <p>Description: ${item.description}</p>
+            <button>Delete</button>
+            </div>
+    `
+      )
+      .join('');
+    eventsListEl.innerHTML = item;
+  } else {
+    eventsContainerEl.style.display = 'none';
+  }
+}
 
 function load() {
   const dt = new Date();
@@ -83,6 +134,7 @@ function load() {
     daySquare.classList.add('day');
 
     let dayString = `${year}-${month + 1}-${i - paddingDays}`;
+    const dateString = `${month + 1}/${i - paddingDays}/${year}`;
 
     if (i - paddingDays < 10) {
       dayString = `${year}-${month + 1}-0${i - paddingDays}`;
@@ -97,26 +149,42 @@ function load() {
     if (i > paddingDays) {
       daySquare.innerText = i - paddingDays;
 
-      const eventForDay = events.find((e) => e.date === dayString);
+      const eventForDay = events.filter((e) => e.date === dayString);
 
       if (i - paddingDays === day && nav === 0) {
         daySquare.id = 'currentDay';
       }
 
-      if (eventForDay) {
+      if (eventForDay.length > 0) {
         const eventDiv = document.createElement('div');
         eventDiv.classList.add('event');
-        eventDiv.innerText = eventForDay.title;
+        eventDiv.innerText = eventForDay.length + ' tasks';
         daySquare.appendChild(eventDiv);
       }
 
-      daySquare.addEventListener('click', () => (dateInput.value = dayString));
+      daySquare.addEventListener(
+        'click',
+        () => (dateInput.value = dayString) && showEvents(dayString)
+      );
     } else {
       daySquare.classList.add('padding');
     }
 
     calendar.appendChild(daySquare);
   }
+}
+
+function closeModal() {
+  deleteEventModal.style.display = 'none';
+  backDrop.style.display = 'none';
+  clicked = null;
+  load();
+}
+
+function deleteEvent() {
+  events = events.filter((e) => e.date !== clicked);
+  sessionStorage.setItem('events', JSON.stringify(events));
+  closeModal();
 }
 
 function initButtons() {
@@ -129,6 +197,11 @@ function initButtons() {
     nav--;
     load();
   });
+
+  document
+    .getElementById('deleteButton')
+    .addEventListener('click', deleteEvent);
+  document.getElementById('closeButton').addEventListener('click', closeModal);
 
   toggleFormBtn.onclick = () => {
     const formEl = document.getElementById('form');

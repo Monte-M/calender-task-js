@@ -45,12 +45,17 @@ body {
 
 #form input,
 #form select,
-#form button {
+#form button,
+#form textarea {
   padding: 5px;
   margin: 10px 0;
   border-radius: 5px;
   border: none;
   box-shadow: 1px 1px 5px gray;
+}
+
+#form textarea {
+  resize: none;
 }
 
 #form label {
@@ -157,7 +162,77 @@ body {
   box-shadow: none !important;
 }
 
+/* events */
+
+#eventsContainer {
+  display: none;
+}
+
+#eventsContainer button {
+  width: 75px;
+  cursor: pointer;
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+  transition: 0.3s;
+  background-color: #d36c6c;
+}
+
+#eventsContainer {
+  display: flex;
+  flex-direction: column;
+}
+.eventsList {
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.singleEvent {
+  border: 1px solid gray;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px gray;
+}
+
 /* modals */
+
+#deleteEventModal {
+  display: none;
+  z-index: 20;
+  padding: 25px;
+  background-color: #f2f3f5;
+  box-shadow: 0px 0px 3px black;
+  border-radius: 5px;
+  width: 350px;
+  top: 100px;
+  left: calc(50% - 175px);
+  position: absolute;
+  font-family: sans-serif;
+}
+
+#closeButton,
+#deleteButton {
+  width: 75px;
+  cursor: pointer;
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+  transition: 0.3s;
+}
+
+#deleteButton {
+  background-color: #d36c6c;
+}
+
+#closeButton {
+  background-color: #48cc44;
+}
 
 #modalBackDrop {
   display: none;
