@@ -1,13 +1,42 @@
 let nav = 0;
 let clicked = null;
 let events = sessionStorage.getItem('events')
-  ? JSON.parse(localStorage.getItem('events'))
+  ? JSON.parse(sessionStorage.getItem('events'))
   : [];
 
 const calendar = document.getElementById('calendar');
-
-const newEventModal = document.getElementById('newEventModal');
+const deleteEventModal = document.getElementById('deleteEventModal');
 const backDrop = document.getElementById('modalBackDrop');
+const toggleFormBtn = document.getElementById('toggleView');
+
+// inputs
+const titleInput = document.getElementById('title');
+const dateInput = document.getElementById('date');
+const startTimeInput = document.getElementById('startTime');
+const endTimeInput = document.getElementById('endTime');
+const typeInput = document.getElementById('type');
+const descriptionInput = document.getElementById('description');
+const addEventBtn = document.getElementById('addEvent');
+
+addEventBtn.onclick = () => {
+  if (title.value) {
+    title.classList.remove('error');
+
+    events.push({
+      title: titleInput.value,
+      date: dateInput.value,
+      startTime: startTimeInput.value,
+      endTime: endTimeInput.value,
+      type: typeInput.value,
+      description: descriptionInput.value,
+    });
+
+    sessionStorage.setItem('events', JSON.stringify(events));
+    window.location.reload();
+  } else {
+    title.classList.add('error');
+  }
+};
 
 const weekdays = [
   'Monday',
@@ -18,20 +47,6 @@ const weekdays = [
   'Saturday',
   'Sunday',
 ];
-
-function openModal(date) {
-  clicked = date;
-
-  const eventForDay = events.find((e) => e.date === clicked);
-
-  if (eventForDay) {
-    console.log('Event already exists');
-  } else {
-    newEventModal.style.display = 'block';
-  }
-
-  backDrop.style.display = 'block';
-}
 
 function load() {
   const dt = new Date();
@@ -67,12 +82,35 @@ function load() {
     const daySquare = document.createElement('div');
     daySquare.classList.add('day');
 
+    let dayString = `${year}-${month + 1}-${i - paddingDays}`;
+
+    if (i - paddingDays < 10) {
+      dayString = `${year}-${month + 1}-0${i - paddingDays}`;
+    }
+    if (month < 10) {
+      dayString = `${year}-0${month + 1}-${i - paddingDays}`;
+    }
+    if (month < 10 && i - paddingDays < 10) {
+      dayString = `${year}-0${month + 1}-0${i - paddingDays}`;
+    }
+
     if (i > paddingDays) {
       daySquare.innerText = i - paddingDays;
 
-      daySquare.addEventListener('click', () =>
-        openModal(`${month + 1}/${i - paddingDays}/${year}`)
-      );
+      const eventForDay = events.find((e) => e.date === dayString);
+
+      if (i - paddingDays === day && nav === 0) {
+        daySquare.id = 'currentDay';
+      }
+
+      if (eventForDay) {
+        const eventDiv = document.createElement('div');
+        eventDiv.classList.add('event');
+        eventDiv.innerText = eventForDay.title;
+        daySquare.appendChild(eventDiv);
+      }
+
+      daySquare.addEventListener('click', () => (dateInput.value = dayString));
     } else {
       daySquare.classList.add('padding');
     }
@@ -91,6 +129,17 @@ function initButtons() {
     nav--;
     load();
   });
+
+  toggleFormBtn.onclick = () => {
+    const formEl = document.getElementById('form');
+    if (formEl.style.display !== 'none') {
+      formEl.style.display = 'none';
+      toggleFormBtn.innerText = 'Show Create View';
+    } else {
+      toggleFormBtn.innerText = 'Hide Create View';
+      formEl.style.display = 'flex';
+    }
+  };
 }
 
 initButtons();

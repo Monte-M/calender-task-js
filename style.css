@@ -12,14 +12,34 @@ body {
 
 /* form */
 
-#form {
+#toggleView {
+  cursor: pointer;
+  padding: 10px;
+  transition: 0.3s;
+  background-color: #b291df;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 1px 1px 5px gray;
+  margin-top: 10px;
+}
+
+#toggleView:hover {
+  background-color: #a074df;
+}
+
+.formContainer {
   width: 400px;
+  margin-left: 30px;
+}
+
+#form {
   display: flex;
   flex-direction: column;
 }
 
 #form h2 {
-  margin-top: 45px;
+  margin-top: 20px;
   color: #6c04e2;
 }
 
@@ -56,6 +76,10 @@ body {
 
 #form button:hover {
   background-color: #a074df;
+}
+
+#eventTitleInput.error {
+  border: 2px solid red;
 }
 
 /* calander */
@@ -119,7 +143,12 @@ body {
   justify-content: space-between;
 }
 .day:hover {
-  background-color: #e8dff5;
+  background-color: #e8dff5 !important;
+}
+
+.day + #currentDay {
+  font-weight: bold;
+  background-color: #ebe6f1;
 }
 
 .padding {
@@ -129,53 +158,6 @@ body {
 }
 
 /* modals */
-
-#newEventModal {
-  display: none;
-  z-index: 20;
-  padding: 25px;
-  background-color: #f2f3f5;
-  box-shadow: 0px 0px 3px black;
-  border-radius: 5px;
-  width: 350px;
-  top: 100px;
-  left: calc(50% - 175px);
-  position: absolute;
-  font-family: sans-serif;
-}
-
-#eventTitleInput {
-  padding: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 25px;
-  border-radius: 3px;
-  border: none;
-  box-shadow: 0px 0px 3px gray;
-}
-
-#saveButton,
-#cancelButton,
-#closeButton,
-#deleteButton {
-  width: 75px;
-  cursor: pointer;
-  border: none;
-  padding: 5px;
-  border-radius: 5px;
-  color: white;
-  transition: 0.3s;
-}
-
-#cancelButton,
-#deleteButton {
-  background-color: #d36c6c;
-}
-
-#saveButton,
-#closeButton {
-  background-color: #48cc44;
-}
 
 #modalBackDrop {
   display: none;

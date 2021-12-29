@@ -31,46 +31,41 @@
         <div id="calendar"></div>
       </div>
 
-      <div id="newEventModal">
-        <h2>New Event</h2>
-
-        <input type="text" id="eventTitleInput" placeholder="Event Title" />
-
-        <button id="saveButton">Save</button>
-        <button id="cancelButton">Cancel</button>
-      </div>
-
       <div id="modalBackDrop"></div>
 
-      <div id="form">
-        <h2>Create new event</h2>
-        <label for="title">Title</label>
-        <input type="text" id="title" required maxlength="50" />
+      <div class="formContainer">
+        <button id="toggleView">Hide Create View</button>
 
-        <label for="date">Date</label>
-        <input type="date" id="date" required />
-        <div class="times">
-          <div>
-            <label for="startTime">Start time</label>
-            <input type="time" id="startTime" required />
+        <div id="form">
+          <h2>Create new event</h2>
+          <label for="title">Title</label>
+          <input type="text" id="title" required maxlength="50" />
+
+          <label for="date">Date</label>
+          <input type="date" id="date" required />
+          <div class="times">
+            <div>
+              <label for="startTime">Start time</label>
+              <input type="time" id="startTime" required />
+            </div>
+            <div>
+              <label for="endTime">End time</label>
+              <input type="time" id="endTime" required />
+            </div>
           </div>
-          <div>
-            <label for="endTime">End time</label>
-            <input type="time" id="endTime" required />
-          </div>
+
+          <label for="type">Type</label>
+          <select name="type" id="type">
+            <option option="meeting">Meeting</option>
+            <option option="call">Call</option>
+            <option option="outOfOffice">Out of office</option>
+          </select>
+
+          <label for="description">Description</label>
+          <input type="text" id="description" />
+
+          <button id="addEvent">Add event</button>
         </div>
-
-        <label for="type">Type</label>
-        <select name="" id="type">
-          <option>Meeting</option>
-          <option>Call</option>
-          <option>Out of office</option>
-        </select>
-
-        <label for="description">Description</label>
-        <input type="text" />
-
-        <button>Add event</button>
       </div>
     </div>
 
