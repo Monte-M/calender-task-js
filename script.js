@@ -4,10 +4,12 @@ let events = sessionStorage.getItem('events')
   ? JSON.parse(sessionStorage.getItem('events'))
   : [];
 
+// elements
 const calendar = document.getElementById('calendar');
 const deleteEventModal = document.getElementById('deleteEventModal');
 const backDrop = document.getElementById('modalBackDrop');
 const toggleFormBtn = document.getElementById('toggleView');
+const deleteButton = document.getElementById('deleteButton');
 
 // inputs
 const titleInput = document.getElementById('title');
@@ -21,14 +23,28 @@ const addEventBtn = document.getElementById('addEvent');
 // event elements
 const eventsContainerEl = document.getElementById('eventsContainer');
 const eventsListEl = document.getElementById('eventsList');
-const singleEventEl = document.getElementById('singleEvent');
 const titleEl = document.getElementById('titleEl');
+
+const weekdays = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
+
+const uniqid = new Date();
+
+const eventsArr = JSON.parse(sessionStorage.getItem('events'));
 
 addEventBtn.onclick = () => {
   if (title.value) {
     title.classList.remove('error');
 
     events.push({
+      id: uniqid,
       title: titleInput.value,
       date: dateInput.value,
       startTime: startTimeInput.value,
@@ -44,43 +60,33 @@ addEventBtn.onclick = () => {
   }
 };
 
-const weekdays = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday',
-];
+function openModal(date, filteredArr, title) {
+  deleteEventModal.style.display = 'block';
+  document.getElementById('eventText').innerText = title;
 
-function openModal(date) {
-  clicked = date;
+  deleteButton.onclick = () => {
+    sessionStorage.setItem('events', JSON.stringify(filteredArr));
+    window.location.reload();
+  };
+}
 
-  const eventForDay = events.find((e) => e.date === clicked);
-
-  if (eventForDay) {
-    document.getElementById('eventText').innerText = eventForDay.title;
-    deleteEventModal.style.display = 'block';
-  } else {
-    newEventModal.style.display = 'block';
-  }
-
-  backDrop.style.display = 'block';
-  console.log('date1', date);
+function closeModal() {
+  deleteEventModal.style.display = 'none';
+  clicked = null;
+  load();
 }
 
 function showEvents(date) {
   clicked = date;
-  console.log('clicked', clicked);
+  console.log('date', date);
 
-  const eventForDay = events.filter((e) => e.date == clicked);
+  const eventForDay = eventsArr.filter((e) => e.date == clicked);
   if (eventForDay.length > 0) {
     eventsContainerEl.style.display = 'flex';
     const item = eventForDay
       .map(
         (item) => `
-          <div class='singleEvent'>
+          <div class='singleEvent' id=${item.id}>
             <p>Title: ${item.title}</p>
             <div class='eventTimes'>
               <p>Start time: ${item.startTime}</p>
@@ -88,7 +94,7 @@ function showEvents(date) {
             </div>
             <p>Type: ${item.type}</p>
             <p>Description: ${item.description}</p>
-            <button>Delete</button>
+            <button id=${item.id} class='deleteBtn'>Delete</button>
             </div>
     `
       )
@@ -98,6 +104,21 @@ function showEvents(date) {
     eventsContainerEl.style.display = 'none';
   }
 }
+
+eventsContainerEl.addEventListener('click', async (e) => {
+  if (e.target.classList.contains('deleteBtn')) {
+    console.log(e.target.id);
+    const id = e.target.id;
+    const title = e.path[1].children[0].innerHTML.slice(7);
+    console.log();
+
+    const filteredArr = JSON.parse(sessionStorage.getItem('events')).filter(
+      (e) => e.id !== id
+    );
+
+    openModal(id, filteredArr, title);
+  }
+});
 
 function load() {
   const dt = new Date();
@@ -134,7 +155,6 @@ function load() {
     daySquare.classList.add('day');
 
     let dayString = `${year}-${month + 1}-${i - paddingDays}`;
-    const dateString = `${month + 1}/${i - paddingDays}/${year}`;
 
     if (i - paddingDays < 10) {
       dayString = `${year}-${month + 1}-0${i - paddingDays}`;
@@ -174,19 +194,6 @@ function load() {
   }
 }
 
-function closeModal() {
-  deleteEventModal.style.display = 'none';
-  backDrop.style.display = 'none';
-  clicked = null;
-  load();
-}
-
-function deleteEvent() {
-  events = events.filter((e) => e.date !== clicked);
-  sessionStorage.setItem('events', JSON.stringify(events));
-  closeModal();
-}
-
 function initButtons() {
   document.getElementById('nextButton').addEventListener('click', () => {
     nav++;
@@ -198,9 +205,6 @@ function initButtons() {
     load();
   });
 
-  document
-    .getElementById('deleteButton')
-    .addEventListener('click', deleteEvent);
   document.getElementById('closeButton').addEventListener('click', closeModal);
 
   toggleFormBtn.onclick = () => {
