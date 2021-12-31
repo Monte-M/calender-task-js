@@ -303,9 +303,9 @@ body {
   }
 
   #calendar div {
-    width: 25px;
-    height: 40 px;
-    margin: 8px;
+    width: 24px;
+    height: 40px;
+    margin: 9px;
     padding: 5px;
   }
 
@@ -313,8 +313,8 @@ body {
     font-size: 10px;
   }
   .event {
-    font-size: 9px;
-    margin: 3px -8px !important;
+    font-size: 8px;
+    margin: 2px -8px !important;
   }
 
   .formContainer {
