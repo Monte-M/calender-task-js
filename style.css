@@ -286,6 +286,9 @@ body {
     font-size: 10px;
     margin: 6px -8px !important;
   }
+  .formContainer {
+    margin: 0;
+  }
 }
 @media (max-width: 400px) {
   #header button {
