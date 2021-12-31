@@ -233,3 +233,91 @@ body {
 #deleteButton {
   background-color: #48cc44;
 }
+
+@media (max-width: 1200px) {
+  .container {
+    align-items: center;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 900px) {
+  #calendarContainer {
+    width: 600px;
+  }
+
+  #calendar div {
+    width: 61px;
+    height: 65px;
+    margin: 12px;
+    padding: 5px;
+  }
+
+  #weekdays {
+    justify-content: flex-end;
+  }
+
+  #weekdays div {
+    width: 70px;
+    margin: 10px;
+  }
+
+  .event {
+    font-size: 12px;
+    margin: 7px 0px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  #calendarContainer {
+    width: 400px;
+  }
+  #weekdays div {
+    font-size: 10px;
+  }
+
+  #calendar div {
+    width: 35px;
+    height: 50px;
+    margin: 11px;
+    padding: 5px;
+  }
+  .event {
+    font-size: 10px;
+    margin: 6px -8px !important;
+  }
+}
+@media (max-width: 400px) {
+  #header button {
+    font-size: 10px;
+    width: 40px;
+  }
+
+  #calendarContainer {
+    width: 300px;
+  }
+
+  #weekdays div {
+    font-size: 7px;
+    margin: 5px;
+  }
+
+  #calendar div {
+    width: 25px;
+    height: 40 px;
+    margin: 8px;
+    padding: 5px;
+  }
+
+  .day {
+    font-size: 10px;
+  }
+  .event {
+    font-size: 9px;
+    margin: 3px -8px !important;
+  }
+
+  .formContainer {
+    width: 300px;
+  }
+}
