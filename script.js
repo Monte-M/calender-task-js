@@ -50,6 +50,7 @@ const prefilledArr = [
 ];
 
 const uniqid = new Date();
+
 let eventsArr = [];
 
 function checkStorage() {
@@ -59,8 +60,6 @@ function checkStorage() {
     eventsArr = sessionStorage.setItem('events', JSON.stringify(prefilledArr));
   }
 }
-
-checkStorage();
 
 addEventBtn.onclick = () => {
   if (!titleInput.value) {
@@ -115,62 +114,6 @@ addEventBtn.onclick = () => {
     window.location.reload();
   }
 };
-
-function openModal(filteredArr, title) {
-  deleteEventModal.style.display = 'block';
-  document.getElementById('eventText').innerText = title;
-
-  deleteButton.onclick = () => {
-    sessionStorage.setItem('events', JSON.stringify(filteredArr));
-    window.location.reload();
-  };
-}
-
-function closeModal() {
-  deleteEventModal.style.display = 'none';
-  clicked = null;
-  load();
-}
-
-function showEvents(date) {
-  clicked = date;
-
-  const eventForDay = eventsArr.filter((e) => e.date == clicked);
-  if (eventForDay.length > 0) {
-    eventsContainerEl.style.display = 'flex';
-    const item = eventForDay
-      .map(
-        (item) => `
-          <div class='singleEvent' id=${item.id}>
-            <p>Title: ${item.title}</p>
-            <div class='eventTimes'>
-              <p>Start time: ${item.startTime}</p>
-              <p>End time: ${item.endTime}</p>
-            </div>
-            <p>Type: ${item.type}</p>
-            <p>Description: ${item.description}</p>
-            <button id=${item.id} class='deleteBtn'>Delete</button>
-            </div>
-    `
-      )
-      .join('');
-    eventsListEl.innerHTML = item;
-  } else {
-    eventsContainerEl.style.display = 'none';
-  }
-}
-
-eventsContainerEl.addEventListener('click', async (e) => {
-  if (e.target.classList.contains('deleteBtn')) {
-    const id = e.target.id;
-    const title = e.path[1].children[0].innerHTML.slice(7);
-
-    const filteredArr = JSON.parse(sessionStorage.getItem('events')).filter(
-      (e) => e.id !== id
-    );
-    openModal(filteredArr, title);
-  }
-});
 
 function load() {
   const dt = new Date();
@@ -248,6 +191,50 @@ function load() {
   }
 }
 
+function showEvents(date) {
+  clicked = date;
+
+  const eventForDay = eventsArr.filter((e) => e.date == clicked);
+  if (eventForDay.length > 0) {
+    eventsContainerEl.style.display = 'flex';
+    const item = eventForDay
+      .map(
+        (item) => `
+          <div class='singleEvent' id=${item.id}>
+            <p>Title: ${item.title}</p>
+            <div class='eventTimes'>
+              <p>Start time: ${item.startTime}</p>
+              <p>End time: ${item.endTime}</p>
+            </div>
+            <p>Type: ${item.type}</p>
+            <p>Description: ${item.description}</p>
+            <button id=${item.id} class='deleteBtn'>Delete</button>
+            </div>
+    `
+      )
+      .join('');
+    eventsListEl.innerHTML = item;
+  } else {
+    eventsContainerEl.style.display = 'none';
+  }
+}
+
+function openModal(filteredArr, title) {
+  deleteEventModal.style.display = 'block';
+  document.getElementById('eventText').innerText = title;
+
+  deleteButton.onclick = () => {
+    sessionStorage.setItem('events', JSON.stringify(filteredArr));
+    window.location.reload();
+  };
+}
+
+function closeModal() {
+  deleteEventModal.style.display = 'none';
+  clicked = null;
+  load();
+}
+
 function initButtons() {
   document.getElementById('nextButton').addEventListener('click', () => {
     nav++;
@@ -259,8 +246,6 @@ function initButtons() {
     load();
   });
 
-  document.getElementById('closeButton').addEventListener('click', closeModal);
-
   toggleFormBtn.onclick = () => {
     const formEl = document.getElementById('form');
     if (formEl.style.display !== 'none') {
@@ -271,7 +256,22 @@ function initButtons() {
       formEl.style.display = 'flex';
     }
   };
+
+  eventsContainerEl.addEventListener('click', async (e) => {
+    if (e.target.classList.contains('deleteBtn')) {
+      const id = e.target.id;
+      const title = e.path[1].children[0].innerHTML.slice(7);
+
+      const filteredArr = JSON.parse(sessionStorage.getItem('events')).filter(
+        (e) => e.id !== id
+      );
+      openModal(filteredArr, title);
+    }
+  });
+
+  document.getElementById('closeButton').addEventListener('click', closeModal);
 }
 
+checkStorage();
 initButtons();
 load();

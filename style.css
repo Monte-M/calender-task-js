@@ -169,6 +169,10 @@ body {
   box-shadow: none !important;
 }
 
+.padding:hover {
+  background-color: #f2f3f5 !important;
+}
+
 /* events */
 
 #eventsContainer {
@@ -195,8 +199,15 @@ body {
   border: 1px solid gray;
   margin: 10px 0;
   padding: 10px;
+  height: auto;
   border-radius: 5px;
   box-shadow: 1px 1px 5px gray;
+  overflow-wrap: anywhere;
+}
+
+.singleEvent p {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 /* modals */
