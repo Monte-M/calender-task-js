@@ -168,6 +168,7 @@ eventsContainerEl.addEventListener('click', async (e) => {
     const filteredArr = JSON.parse(sessionStorage.getItem('events')).filter(
       (e) => e.id !== id
     );
+    openModal(filteredArr, title);
   }
 });
 
