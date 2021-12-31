@@ -19,6 +19,8 @@ const endTimeInput = document.getElementById('endTime');
 const typeInput = document.getElementById('type');
 const descriptionInput = document.getElementById('description');
 const addEventBtn = document.getElementById('addEvent');
+const errorMessage = document.getElementById('errorMessage');
+const timeErrorMessage = document.getElementById('timeErrorMessage');
 
 // event elements
 const eventsContainerEl = document.getElementById('eventsContainer');
@@ -35,14 +37,70 @@ const weekdays = [
   'Sunday',
 ];
 
-const uniqid = new Date();
+const prefilledArr = [
+  {
+    id: '2021-12-31T06:40:19.156Z',
+    title: 'Visma Task Deadline',
+    date: '2022-01-10',
+    startTime: '13:00',
+    endTime: '14:00',
+    type: 'Out of office',
+    description: 'Have to finish task before this date.',
+  },
+];
 
-const eventsArr = JSON.parse(sessionStorage.getItem('events'));
+const uniqid = new Date();
+let eventsArr = [];
+
+function checkStorage() {
+  if (sessionStorage.events) {
+    eventsArr = JSON.parse(sessionStorage.getItem('events'));
+  } else {
+    eventsArr = sessionStorage.setItem('events', JSON.stringify(prefilledArr));
+  }
+}
+
+checkStorage();
 
 addEventBtn.onclick = () => {
-  if (title.value) {
-    title.classList.remove('error');
+  if (!titleInput.value) {
+    titleInput.classList.add('error');
+    errorMessage.style.display = 'block';
+  } else {
+    titleInput.classList.remove('error');
+  }
+  if (!dateInput.value) {
+    dateInput.classList.add('error');
+    errorMessage.style.display = 'block';
+  } else {
+    dateInput.classList.remove('error');
+  }
+  if (!startTimeInput.value) {
+    startTimeInput.classList.add('error');
+    errorMessage.style.display = 'block';
+  } else {
+    startTimeInput.classList.remove('error');
+  }
+  if (!endTimeInput.value) {
+    endTimeInput.classList.add('error');
+    errorMessage.style.display = 'block';
+  } else {
+    endTimeInput.classList.remove('error');
+  }
+  if (endTimeInput.value < startTimeInput.value) {
+    endTimeInput.classList.add('error');
+    timeErrorMessage.style.display = 'block';
+  } else {
+    endTimeInput.classList.remove('error');
+  }
 
+  if (
+    titleInput.value &&
+    dateInput.value &&
+    startTimeInput.value &&
+    endTimeInput.value &&
+    endTimeInput.value > startTimeInput.value
+  ) {
     events.push({
       id: uniqid,
       title: titleInput.value,
@@ -55,12 +113,10 @@ addEventBtn.onclick = () => {
 
     sessionStorage.setItem('events', JSON.stringify(events));
     window.location.reload();
-  } else {
-    title.classList.add('error');
   }
 };
 
-function openModal(date, filteredArr, title) {
+function openModal(filteredArr, title) {
   deleteEventModal.style.display = 'block';
   document.getElementById('eventText').innerText = title;
 
@@ -78,7 +134,6 @@ function closeModal() {
 
 function showEvents(date) {
   clicked = date;
-  console.log('date', date);
 
   const eventForDay = eventsArr.filter((e) => e.date == clicked);
   if (eventForDay.length > 0) {
@@ -107,16 +162,12 @@ function showEvents(date) {
 
 eventsContainerEl.addEventListener('click', async (e) => {
   if (e.target.classList.contains('deleteBtn')) {
-    console.log(e.target.id);
     const id = e.target.id;
     const title = e.path[1].children[0].innerHTML.slice(7);
-    console.log();
 
     const filteredArr = JSON.parse(sessionStorage.getItem('events')).filter(
       (e) => e.id !== id
     );
-
-    openModal(id, filteredArr, title);
   }
 });
 
@@ -145,7 +196,9 @@ function load() {
 
   document.getElementById('monthDisplay').innerText = `${dt.toLocaleDateString(
     'en-US',
-    { month: 'long' }
+    {
+      month: 'long',
+    }
   )} ${year}`;
 
   calendar.innerHTML = '';
@@ -178,7 +231,7 @@ function load() {
       if (eventForDay.length > 0) {
         const eventDiv = document.createElement('div');
         eventDiv.classList.add('event');
-        eventDiv.innerText = eventForDay.length + ' tasks';
+        eventDiv.innerText = 'Tasks: ' + eventForDay.length;
         daySquare.appendChild(eventDiv);
       }
 

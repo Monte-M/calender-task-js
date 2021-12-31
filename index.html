@@ -59,6 +59,9 @@
               <input type="time" id="endTime" required />
             </div>
           </div>
+          <p id="timeErrorMessage">
+            End time cannot be earlier than start time
+          </p>
 
           <label for="type">Type</label>
           <select name="type" id="type">
@@ -71,6 +74,7 @@
           <textarea rows="4" cols="50" id="description"></textarea>
 
           <button id="addEvent">Add event</button>
+          <p id="errorMessage">Please fill all required fields</p>
         </div>
         <div id="eventsContainer">
           <h2>Events</h2>

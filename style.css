@@ -83,8 +83,15 @@ body {
   background-color: #a074df;
 }
 
-#eventTitleInput.error {
-  border: 2px solid red;
+.error {
+  border: 2px solid red !important;
+}
+
+#errorMessage,
+#timeErrorMessage {
+  display: none;
+  color: red;
+  font-size: 18px;
 }
 
 /* calander */
@@ -183,20 +190,13 @@ body {
   display: flex;
   flex-direction: column;
 }
-.eventsList {
-  border: 1px solid #000;
-  border-radius: 5px;
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-}
 
 .singleEvent {
   border: 1px solid gray;
   margin: 10px 0;
   padding: 10px;
   border-radius: 5px;
-  box-shadow: 1px 1px 3px gray;
+  box-shadow: 1px 1px 5px gray;
 }
 
 /* modals */
